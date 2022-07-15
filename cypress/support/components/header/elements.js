@@ -1,3 +1,3 @@
 exports.el = {
-    userName:'header a strong'
+    fullName:'header a strong'
 }
