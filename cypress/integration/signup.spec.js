@@ -54,7 +54,9 @@ describe('cadastro', () => {
                 'POST',
                 'http://localhost:3333/users',
                 user
-            )
+            ).then((response) => {
+                expect(response.status).to.eq(200)
+            })
         })
 
         it('não deve cadastrar o usuário', () => {
