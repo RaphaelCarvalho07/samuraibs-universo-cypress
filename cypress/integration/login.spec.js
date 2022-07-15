@@ -13,17 +13,7 @@ describe('login', () => {
         }
 
         before(() => {
-            cy.task('removeUser', user.email)
-                .then((result) => {
-                    console.log(result)
-                })
-            cy.request(
-                'POST',
-                'http://localhost:3333/users',
-                user
-            ).then((response) => {
-                expect(response.status).to.eq(200)
-            })
+            cy.postUser(user)
         })
 
         it('deve logar com sucesso', () => {
