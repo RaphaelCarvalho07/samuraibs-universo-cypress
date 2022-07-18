@@ -50,7 +50,7 @@ describe('login', () => {
         })
     })
 
-    context.only('quando o formato do email é inválido', () => {
+    context('quando o formato do email é inválido', () => {
 
         const emails = [
             'koi.com.br',
@@ -70,14 +70,34 @@ describe('login', () => {
         emails.forEach((email) => {
             const user = { email: email, password: 'pwd123' }
 
-            it(`não deve logar com o email ${email.toLowerCase()}`, () => {                
+            it(`não deve logar com o email ${email.toLowerCase()}`, () => {
                 loginPage.form(user)
                 loginPage.submit()
-
-                // refatorar para AfterEach
-                loginPage.alertError.shouldHaveText('Informe um email válido')
             })
         })
 
+        afterEach(() => {
+            loginPage.alertError.shouldHaveText('Informe um email válido')
+        })
+
+    })
+
+    context('quando não preencho nenhum dos campos', () => {
+
+        const alertMessages = [
+            'E-mail é obrigatório',
+            'Senha é obrigatória'
+        ]
+
+        before(() => {
+            loginPage.go()
+            loginPage.submit()
+        })
+
+        alertMessages.forEach((alert) => {
+            it(`deve exibir ${alert.toLowerCase()}`, () => {
+                loginPage.alertError.shouldHaveText(alert)
+            })
+        })
     })
 })
