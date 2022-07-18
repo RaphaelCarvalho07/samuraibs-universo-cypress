@@ -68,7 +68,7 @@ describe('cadastro', () => {
             signupPage.go()
             signupPage.form(user)
             signupPage.submit()
-            signupPage.alertHaveText('Informe um email válido')
+            signupPage.alertError.shouldHaveText('Informe um email válido')
         })
     })
 
@@ -90,7 +90,7 @@ describe('cadastro', () => {
         })
 
         afterEach(() => {
-            signupPage.alertHaveText('Pelo menos 6 caracteres')
+            signupPage.alertError.shouldHaveText('Pelo menos 6 caracteres')
         })
     })
 
@@ -109,7 +109,7 @@ describe('cadastro', () => {
 
         alertMessages.forEach((alert) => {
             it(`deve exibir ${alert.toLowerCase()}`, () => {
-                signupPage.alertHaveText(alert)
+                signupPage.alertError.shouldHaveText(alert)
             })
         })
     })

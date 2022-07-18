@@ -1,6 +1,5 @@
 import loginPage from '../support/pages/login'
 import dashPage from '../support/pages/dash'
-import alert from '../support/components/alert'
 
 describe('login', () => {
 
@@ -64,14 +63,18 @@ describe('login', () => {
             'xpto123'
         ]
 
+        before(() => {
+            loginPage.go()
+        })
+
         emails.forEach((email) => {
             const user = { email: email, password: 'pwd123' }
 
-            it(`não deve logar com o email ${email}`, () => {
-                loginPage.go()
+            it(`não deve logar com o email ${email.toLowerCase()}`, () => {                
                 loginPage.form(user)
                 loginPage.submit()
 
+                // refatorar para AfterEach
                 loginPage.alertError.shouldHaveText('Informe um email válido')
             })
         })
