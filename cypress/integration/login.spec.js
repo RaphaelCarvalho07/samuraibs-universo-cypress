@@ -1,5 +1,6 @@
 import loginPage from '../support/pages/login'
 import dashPage from '../support/pages/dash'
+import alert from '../support/components/alert'
 
 describe('login', () => {
 
@@ -45,11 +46,35 @@ describe('login', () => {
             loginPage.go()
             loginPage.form(user)
             loginPage.submit()
-            
+
             loginPage.toast.shouldHaveText(message)
         })
     })
-})
 
-// Ocorreu um erro ao fazer login, verifique suas credenciais.
-//.class[type= error]
+    context.only('quando o formato do email é inválido', () => {
+
+        const emails = [
+            'koi.com.br',
+            'yahoo.com',
+            '@gmail.com',
+            '@',
+            'koi$',
+            '111',
+            '&*^&^&*',
+            'xpto123'
+        ]
+
+        emails.forEach((email) => {
+            const user = { email: email, password: 'pwd123' }
+
+            it(`não deve logar com o email ${email}`, () => {
+                loginPage.go()
+                loginPage.form(user)
+                loginPage.submit()
+
+                loginPage.alertError.shouldHaveText('Informe um email válido')
+            })
+        })
+
+    })
+})
