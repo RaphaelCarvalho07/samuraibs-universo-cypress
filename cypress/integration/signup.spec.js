@@ -3,32 +3,29 @@ import signupPage from '../support/pages/signup'
 
 describe('cadastro', () => {
 
-    context('quando é um novo usuário', () => {
+    before(function () {
+        cy.fixture('koi').then(function (koi) {
+            this.koi = koi
+        })
+    })
 
-        const user = {
-            name: 'Raphael Carvalho',
-            email: 'koi@samuraibs.com',
-            password: 'pwd123'
-        }
-
+    context('quando é um novo usuário', function () {
         // Técnica usada em aplicações mais modernas, usando Intercept
         // cy.intercept('POST', '/users', {
         //     statusCode: 200
         // }).as('postUser')
-
-
         // cy.wait('@postUser')
 
-        before(() => {
-            cy.task('removeUser', user.email)
-                .then((result) => {
+        before(function () {
+            cy.task('removeUser', this.koi.email)
+                .then(function (result) {
                     console.log(result)
                 })
         })
 
-        it('deve cadastrar com sucesso', () => {
+        it('deve cadastrar com sucesso', function () {
             signupPage.go()
-            signupPage.form(user)
+            signupPage.form(this.koi)
             signupPage.submit()
             signupPage.toast.shouldHaveText('Agora você se tornou um(a) Samurai, faça seu login para ver seus agendamentos!')
         })
