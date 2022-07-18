@@ -1,15 +1,13 @@
 
 import { el } from './elements'
-
 import toast from '../../components/toast'
-
-import alertError from '../../components/alert'
+import alert from '../../components/alert'
 
 class SignupPage {
 
     constructor() {
         this.toast = toast
-        this.alertError = alertError
+        this.alert = alert
     }
 
     go() {

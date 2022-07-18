@@ -1,3 +1,3 @@
 exports.el = {
-    alertError: '.alert-error'
+    error: '.alert-error'
 }

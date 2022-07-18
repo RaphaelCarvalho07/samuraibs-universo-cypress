@@ -1,8 +1,8 @@
 import {el} from './elements'
 
 class Alert {
-    shouldHaveText(expectText) {
-        cy.contains(el.alertError, expectText)
+    haveText(expectText) {
+        cy.contains(el.error, expectText)
             .should('be.visible')
     }
 }
