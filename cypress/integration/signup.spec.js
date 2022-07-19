@@ -4,12 +4,15 @@ import signupPage from '../support/pages/signup'
 describe('cadastro', () => {
 
     before(function () {
-        cy.fixture('koi').then(function (koi) {
-            this.koi = koi
+        cy.fixture('signup').then(function (signup) {
+            this.sucess = signup.sucess
+            this.email_dup = signup.email_dup
+            this.email_inv = signup.email_inv
+            this.short_password = signup.short_password
         })
     })
 
-    context('quando é um novo usuário', function () {
+    context('quando é um novo usuário', () => {
         // Técnica usada em aplicações mais modernas, usando Intercept
         // cy.intercept('POST', '/users', {
         //     statusCode: 200
@@ -17,7 +20,7 @@ describe('cadastro', () => {
         // cy.wait('@postUser')
 
         before(function () {
-            cy.task('removeUser', this.koi.email)
+            cy.task('removeUser', this.sucess.email)
                 .then(function (result) {
                     console.log(result)
                 })
@@ -25,7 +28,7 @@ describe('cadastro', () => {
 
         it('deve cadastrar com sucesso', function () {
             signupPage.go()
-            signupPage.form(this.koi)
+            signupPage.form(this.sucess)
             signupPage.submit()
             signupPage.toast.shouldHaveText('Agora você se tornou um(a) Samurai, faça seu login para ver seus agendamentos!')
         })
@@ -33,21 +36,13 @@ describe('cadastro', () => {
     })
 
     context('quando o email já existe', () => {
-
-        const user = {
-            name: 'Bina Carvalho',
-            email: 'bina@samuraibs.com',
-            password: 'pwd123',
-            is_provider: true
-        }
-
-        before(() => {
-            cy.postUser(user)
+        before(function () {
+            cy.postUser(this.email_dup)
         })
 
-        it('não deve cadastrar o usuário', () => {
+        it('não deve cadastrar o usuário', function () {
             signupPage.go()
-            signupPage.form(user)
+            signupPage.form(this.email_dup)
             signupPage.submit()
             signupPage.toast.shouldHaveText('Email já cadastrado para outro usuário.')
         })
@@ -55,33 +50,48 @@ describe('cadastro', () => {
 
     context('quando o email é inválido', () => {
 
-        const user = {
-            name: 'Raphilske Carvalho',
-            email: 'raphilske.gmail.com',
-            password: 'pwd123'
-        }
-
-        it('deve exibir mensagem de alerta', () => {
+        it('deve exibir mensagem de alerta', function () {
             signupPage.go()
-            signupPage.form(user)
+            signupPage.form(this.email_inv)
             signupPage.submit()
             signupPage.alert.haveText('Informe um email válido')
         })
     })
 
-    context('quando a senha é muito curta', () => {
+    // context.only('quando a senha é muito curta', () => {
 
+    //     const passwords = ['1', '2a', 'ab3', 'abc4', 'abc#5']
+
+    //     beforeEach(function () {
+    //         signupPage.go()
+    //     })
+
+    //     passwords.forEach(function (p) {
+    //         this.short_password.password = p
+
+    //         it(`não deve cadastrar com a senha: ${p}`, function () {
+    //             signupPage.form(this.short_password)
+    //             signupPage.submit()
+    //         })
+    //     })
+
+    //     afterEach(() => {
+    //         signupPage.alert.haveText('Pelo menos 6 caracteres')
+    //     })
+    // })
+
+    context.only('quando a senha é muito curta', () => {
         const passwords = ['1', '2a', 'ab3', 'abc4', 'abc#5']
 
-        beforeEach(() => {
+        before(function () {
             signupPage.go()
         })
 
-        passwords.forEach((p) => {
-            const user = { name: 'Jason Friday', email: 'jason@gmail.com', password: p }
+        passwords.forEach(function (p) {
+            it(`não deve cadastrar com senha: ${p}`, function () {
+                this.short_password.password = p
 
-            it(`não deve cadastrar com a senha: ${p}`, () => {
-                signupPage.form(user)
+                signupPage.form(this.short_password)
                 signupPage.submit()
             })
         })
