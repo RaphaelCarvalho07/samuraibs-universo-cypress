@@ -58,29 +58,7 @@ describe('cadastro', () => {
         })
     })
 
-    // context.only('quando a senha é muito curta', () => {
-
-    //     const passwords = ['1', '2a', 'ab3', 'abc4', 'abc#5']
-
-    //     beforeEach(function () {
-    //         signupPage.go()
-    //     })
-
-    //     passwords.forEach(function (p) {
-    //         this.short_password.password = p
-
-    //         it(`não deve cadastrar com a senha: ${p}`, function () {
-    //             signupPage.form(this.short_password)
-    //             signupPage.submit()
-    //         })
-    //     })
-
-    //     afterEach(() => {
-    //         signupPage.alert.haveText('Pelo menos 6 caracteres')
-    //     })
-    // })
-
-    context.only('quando a senha é muito curta', () => {
+    context('quando a senha é muito curta', () => {
         const passwords = ['1', '2a', 'ab3', 'abc4', 'abc#5']
 
         before(function () {
