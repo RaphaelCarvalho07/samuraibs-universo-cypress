@@ -9,7 +9,7 @@ describe('resgaste de senha', () => {
         })
     })
 
-    context('quando o usuário esquece a senha', function () {   
+    context('quando o usuário esquece a senha', function () {
 
         before(function () {
             cy.postUser(this.data)
@@ -22,7 +22,20 @@ describe('resgaste de senha', () => {
 
             const message = 'Enviamos um e-mail para confirmar a recuperação de senha, cheque sua caixa de entrada.'
 
-            fpPage.toast.shouldHaveText(message) 
+            fpPage.toast.shouldHaveText(message)
+        })
+    })
+
+    context.only('quando o usuário solicita recuperação de senha', function () {
+
+        before(function () {
+            cy.postUser(this.data)
+            cy.recoveryPass(this.data.email)
+        })
+
+        it('deve conseguir cadastrar uma nova senha', function () {
+            
+            console.log(Cypress.env('recoveryToken'))
         })
     })
 })
