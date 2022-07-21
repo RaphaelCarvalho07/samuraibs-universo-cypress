@@ -19,7 +19,7 @@ class ForgotPassPage {
     }
 
     submit() {
-        cy.contains('button[type=submit]', 'Recuperar')
+        cy.contains(el.forgotButton, 'Recuperar')
             .click()
     }
 }
