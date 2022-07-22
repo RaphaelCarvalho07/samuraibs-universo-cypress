@@ -26,8 +26,7 @@ describe('dashboard', () => {
             cy.apiLogin(data.customer)
             cy.log(`Consegui o token ${Cypress.env('apiToken')}`)
 
-            cy.setProviderId(data.customer.email)
-            cy.log(`O ID do Rhaegus é ${Cypress.env('providerId')}`)
+            cy.setProviderId(data.provider.email)
         })
 
         it('o mesmo deve ser exibido no dashboard', () => {
@@ -64,36 +63,18 @@ Cypress.Commands.add('setProviderId', (providerEmail) => {
         }
     }).then((response) => {
         expect(response.status).to.eq(200)
-        console.log(response.body)
+        // const providerList = response.body[0]
+        // Cypress.env('providerId', response.body[0].id)
 
         const providerList = response.body
 
         providerList.forEach((provider) => {
             if (provider.email === providerEmail) {
+                // cy.log(provider.id)
+                // cy.log(provider.email)
+                // cy.log(providerEmail)
                 Cypress.env('providerId', provider.id)
             }
         })
     })
 })
-
-// Cypress.Commands.add('setProviderId', function (providerEmail) {
-
-//     cy.request({
-//         method: 'GET',
-//         url: 'http://localhost:3333/providers',
-//         headers: {
-//             authorization: 'Bearer ' + Cypress.env('apiToken')
-//         }
-//     }).then(function (response) {
-//         expect(response.status).to.eq(200)
-//         console.log(response.body)
-        
-//         const providerList = response.body
-
-//         providerList.forEach(function (provider) {
-//             if (provider.email === providerEmail) {
-//                 Cypress.env('providerId', provider.id)
-//             }
-//         })
-//     })
-// })
