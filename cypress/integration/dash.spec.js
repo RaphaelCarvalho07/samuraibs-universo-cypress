@@ -19,7 +19,8 @@ describe('dashboard', () => {
         it('o mesmo deve ser exibido no dashboard', () => {
             const day = Cypress.env('appointmentDay')
 
-            cy.uiLogin(provider)
+            // cy.uiLogin(provider)
+            cy.apiLogin(provider, true)
 
             dashPage.calendarShouldBeVisible()
             dashPage.selectday(day)

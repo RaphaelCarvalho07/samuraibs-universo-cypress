@@ -71,7 +71,7 @@ Cypress.Commands.add('recoveryPass', (email) => {
     })
 })
 
-Cypress.Commands.add('apiLogin', (user) => {
+Cypress.Commands.add('apiLogin', (user, setLocalStorage = false) => {
 
     const payload = {
         email: user.email,
@@ -85,7 +85,17 @@ Cypress.Commands.add('apiLogin', (user) => {
     }).then((response) => {
         expect(response.status).to.eq(200)
         Cypress.env('apiToken', response.body.token)
+
+        if (setLocalStorage) {
+            const { token, user } = response.body
+
+            window.localStorage.setItem('@Samurai:token', token)
+            window.localStorage.setItem('@Samurai:user', JSON.stringify(user))
+        }      
+
     })
+    
+    if(setLocalStorage) cy.visit('/dashboard')
 })
 
 Cypress.Commands.add('setProviderId', (providerEmail) => {
