@@ -1,4 +1,4 @@
-
+import loginPage from '../support/pages/login'
 
 describe('dashboard', () => {
 
@@ -27,11 +27,21 @@ describe('dashboard', () => {
             cy.log(`Consegui o token ${Cypress.env('apiToken')}`)
 
             cy.setProviderId(data.provider.email)
+
+            cy.createAppointment()
         })
 
         it('o mesmo deve ser exibido no dashboard', () => {
-            cy.log(`O ID do Rhaegus é ${Cypress.env('providerId')}`)
-            cy.createAppointment()
+            
+            loginPage.go()
+            loginPage.form(data.provider)
+            loginPage.submit()
+
+            cy.get('[aria-label="Tue Jul 26 2022"]')
+                .should('be.visible').click()
+
+            
+            cy.wait(3000)
         })
     })
 
@@ -83,12 +93,26 @@ Cypress.Commands.add('setProviderId', (providerEmail) => {
 import moment from 'moment'
 
 Cypress.Commands.add('createAppointment', () => {
-        
+
     let now = new Date()
 
     now.setDate(now.getDate() + 1)
 
-    const day = moment(now).format('YYYY-MM-DD 14:00:00')
+    const date = moment(now).format('YYYY-MM-DD 14:00:00')
 
-    cy.log(day)
+    const payload = {
+        provider_id: Cypress.env('providerId'),
+        date: date
+    }
+
+    cy.request({
+        method: 'POST',
+        url: 'http://localhost:3333/appointments',
+        body: payload,
+        headers: {
+            authorization: `Bearer ${Cypress.env('apiToken')}`
+        }
+    }).then((response) => {
+        expect(response.status).to.eq(200)
+    })
 })
