@@ -21,6 +21,6 @@ import './commands'
 
 
 // Screenshots para todos os testes (passando ou falhando)
-afterEach(() => {
+/*afterEach(() => {
      cy.screenshot()
-})
+})*/
